@@ -613,6 +613,7 @@ class calculator:
         
         self.show_patient_history('patient1.db')
 
+    # show_patient_history will display the PATIENT_HIS table when the PATIENT HISTORY button is pressed
     def show_patient_history(self, db_):
         
         #self.dataCols = ('PATIENT ID', 'LAST NAME', 'NAME', 'MI','AGE', 'NEXT OF KIN', 'CONTACT INFO')
@@ -643,7 +644,8 @@ class calculator:
         cnt = 0
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey') 
         self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
-        
+    
+    # column_headings will display the database default table: PATIENT   
     def column_headings(self):
 
         self.recordListColumn.heading('PATIENT ID', text = 'PATIENT ID')
@@ -662,9 +664,7 @@ class calculator:
         self.recordListColumn.column(self.dataCols[4], width = 30)
         self.recordListColumn.column(self.dataCols[5], width = 180)
         self.recordListColumn.column(self.dataCols[6], width = 140)
-
-
-                
+       
         count = 0
         for item in db.database().db_print('patient1.db'):
             count = count + 1
@@ -725,10 +725,12 @@ class calculator:
                 
         return condition
         
-    
+    # col_headers gets the column headers from the statement
     def col_headers(self, statement):
         result = []
         list_ = statement.split(' ')
+        
+        # the following loop only adds the column names and ignore other characters inside the list
         for c in list_:
             if c == 'FROM':
                 break
@@ -751,7 +753,6 @@ class calculator:
             cnt = cnt + 1
         
         # column widths
-        
         if len(result) < 7:
             for n in range (0, len(result)):
                 self.recordListColumn.column(self.dataCols[n], width = 100)
