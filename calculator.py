@@ -29,11 +29,14 @@ class calculator:
         self.root.minsize(width=450, height=500)    # application window size
         self.frame_1 = Tr.Frame(self.root)
         self.frame_2 = Tr.Frame(self.root)
+        self.frame_5 = Tr.Frame(self.root)
         self.frame_3 = Tr.Frame(self.root)
         self.frame_4 = Tr.Frame(self.root)
         self.topFrame = Tr.LabelFrame(self.frame_1, text = 'OPTIONS:')
         self.internal_frame = Tr.Frame(self.frame_1)    # to include the search feature
         self.search_frame = Tr.Frame(self.internal_frame)      # to include the search feature
+        
+        self.records_lable = Tr.Label(self.frame_5, fg = 'blue', text = 'RECORDS')
         
         self.btn_new_patient = Tr.Button(self.topFrame, \
                                        text  = 'NEW PATIENT', command = self.new_patient_win)
@@ -69,7 +72,7 @@ class calculator:
                 
         self.search_lbl = Tr.LabelFrame(self.search_frame, text = 'Search By: ')
         choices = ('Select','Patient Number', 'Patient Name','Patient Last Name','Middle Initial','Age', 'Next of Kin', 'Contact Info',\
-                   'Diagnosis','Allergies','General Search')
+                   'Diagnosis','Allergies','General Search', 'Advance Search')
         self.selection_box = ttk.Combobox(self.search_lbl, values = choices, state = 'readonly')
         self.selection_box.current(0)
         self.selection_box.grid(column = 0, row = 0)
@@ -83,6 +86,7 @@ class calculator:
         self.patientLbl.pack(side = 'top')
         self.recordListColumn.pack(side = 'top')
         
+        self.records_lable.pack(side = 'right')
         
         self.btn_new_patient.pack(side = 'right')
         self.btn_patient_data.pack(side = 'left')
@@ -122,10 +126,13 @@ class calculator:
         self.frame_1.pack(side = 'top')
         self.frame_2.pack(side = 'bottom')
         self.frame_3.pack(side = 'bottom')
+        self.frame_5.pack(side = 'top')
         self.frame_4.pack(side = 'bottom')
         self.topFrame.pack(side = 'top')
         self.internal_frame.pack(side = 'right')
         self.search_frame.pack(side = 'left')
+        
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         
         Tr.mainloop()
     
@@ -333,6 +340,8 @@ class calculator:
         self.frame5.pack(side = 'top')
         self.frame6.pack(side = 'top')
         self.frame7.pack(side = 'bottom')
+        
+        
 
     # The following function saves the records to the database
     # The function also checks that none of the Entries are empty or null   
@@ -377,6 +386,7 @@ class calculator:
         self.contactInfo.delete(0, Tr.END)
         self.nameEntry.focus()
         self.column_headings()
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
     
     # Cancels the new new_patient_win
     # This function can only be used with new patient
@@ -460,7 +470,7 @@ class calculator:
         # way #2
         ''' self.reordListColumn.delete(*self.recordListColumn.get_children())
         '''
-            
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))   
     # Opens the search window    
     def search_(self):
         
@@ -496,11 +506,13 @@ class calculator:
                 id_ = 'CONTACTINFO'
                 self.search_items(id_, int(self.search_entry.get()))
             if self.selection_box.get() == 'Diagnosis':
-                self.specific_search(self.search_entry.get())
+                self.specific_search(self.general_query_diagnosys(self.search_entry.get()))
             if self.selection_box.get() == 'Allergies':
                 self.specific_search(self.general_query_allergies(self.search_entry.get()))
             if self.selection_box.get() == 'General Search':
                 self.general_search_items(self.search_entry.get())
+            if self.selection_box.get() == 'Advance Search':
+                self.specific_search(self.general_query_patient(self.search_entry.get()))
     
     #search_items function looks for specific items        
     def search_items(self, name, key):
@@ -515,6 +527,7 @@ class calculator:
                         
         #colors the row
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey') 
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         count = 0  
         
     def general_search_items(self, key):
@@ -531,13 +544,16 @@ class calculator:
                         
         #colors the row
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey') 
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         count = 0   
         
     def specific_search(self, key):
         self.clear_list() # clear the list
         count = 0
-        # This is just a test for my new function
+        # Names column headers to display results
         self.col_headers(key)
+        
+        # displays results
         for item in db.database().db_general_print('patient1.db', key):
             count = count + 1
             if count % 2 != 0:
@@ -547,6 +563,7 @@ class calculator:
                         
         #colors the row
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey') 
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         count = 0    
     
     # Clears the search criteria 
@@ -567,6 +584,7 @@ class calculator:
                         
         #colors the row
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey') 
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         count = 0
         self.column_headings()
     
@@ -624,6 +642,7 @@ class calculator:
                 self.recordListColumn.insert('', 'end', values=item, tags = ('evenrow',))            
         cnt = 0
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey') 
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         
     def column_headings(self):
 
@@ -656,6 +675,7 @@ class calculator:
         
         #colors the row
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey')   
+        self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         
     def general_query_statement(self):   
         condition =  "SELECT DISTINCT PATIENT.NAME, PATIENT.LASTNAME, PATIENT.AGE, \
@@ -673,23 +693,38 @@ class calculator:
                         ORDER BY PATIENT_HIST.ETHNICITY AND PATIENT.AGE "
         return condition
     
-    def general_query_diagnosys(self, diagnosis):   
+    def general_query_diagnosys(self, key_):   
         condition = "SELECT PATIENT.ID, PATIENT.NAME, PATIENT.LASTNAME, PATIENT.AGE, \
                         PATIENT_HIST.DIAGNOSIS, PATIENT_HIST.DATE\
                         FROM  PATIENT JOIN PATIENT_HIST \
                         ON PATIENT.ID = PATIENT_HIST.PATIENT_ID \
-                        WHERE PATIENT_HIST.DIAGNOSIS = '%s' \
-                        ORDER BY PATIENT_HIST.GENDER " %(diagnosis)
+                        WHERE UPPER(PATIENT_HIST.DIAGNOSIS) LIKE '%" + ((key_).upper()) + "%'" + \
+                        "ORDER BY PATIENT_HIST.GENDER " 
         return condition
 
-    def general_query_allergies(self, diagnosis):   
+    def general_query_allergies(self, key_):   
         condition = "SELECT PATIENT.ID, PATIENT.NAME, PATIENT.LASTNAME, \
                         PATIENT_HIST.ALERGIES\
                         FROM  PATIENT JOIN PATIENT_HIST \
                         ON PATIENT.ID = PATIENT_HIST.PATIENT_ID \
-                        WHERE PATIENT_HIST.ALERGIES = '%s' " %(diagnosis)
+                        WHERE UPPER(PATIENT_HIST.ALERGIES) = '%s' " %((key_).upper())
                         
         return condition
+    
+    def general_query_patient(self, key_):
+        condition = "SELECT ID, NAME, LASTNAME, MINITIAL, AGE \
+                        NEXTOFKIN, CONTACTINFO \
+                        FROM  PATIENT \
+                        WHERE UPPER(ID) LIKE '%" + (key_).upper() + "%'" +  \
+                           "OR UPPER(NAME) LIKE ''%" + (key_).upper() + "%'" +  \
+                           "OR UPPER(LASTNAME) LIKE '%" + (key_).upper() + "%'"  + \
+                           "OR UPPER(MINITIAL) LIKE '%" + (key_).upper()  + "%'"  + \
+                           "OR UPPER(AGE) LIKE '%" + (key_).upper()  + "%'"  + \
+                           "OR UPPER(NEXTOFKIN) LIKE '%" + (key_).upper()  + "%'"  + \
+                           "OR UPPER(CONTACTINFO) LIKE '%" + (key_).upper()  + "%'"
+                
+        return condition
+        
     
     def col_headers(self, statement):
         result = []
@@ -708,7 +743,7 @@ class calculator:
         # column titles
         for val in result[1:len(result)]:
             l_ = val.split('.')
-            print(" result lent ",l_[1])
+            
             if cnt < (len(result) -1):
                 self.recordListColumn.heading(self.dataCols[cnt], text = l_[1].replace(',', ''))
             else:
@@ -723,11 +758,8 @@ class calculator:
             for n in range(len(result)-1,len(result)+(7-len(result))):
                 self.recordListColumn.heading(self.dataCols[n], text = '')
         else:
-            for n in range(0, len(result)):
+            for n in range(0, len(result)-1):
                 self.recordListColumn.column(self.dataCols[n], width = 100)
                 
-            
-            
-      
-                            
+     
     

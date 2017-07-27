@@ -55,7 +55,7 @@ class database:
                            ETHNICITY                    TEXT  NOT NULL,
                            ALERGIES                     TEXT  NOT NULL);''')
         
-        # A table storing patient
+        # A table storing patient data
         cursor.execute('''CREATE TABLE IF NOT EXISTS PATIENT_DATA (
                             ID_KEY_PRIMARY                KEY   NOT NULL,
                             BLOODSUGARLEVEL               INT   NOT NULL,
@@ -63,6 +63,16 @@ class database:
                             EXERCIRSE                 CHAR(3)   NOT NULL,
                             FREQUENCY                    INT    NOT NULL,
                             HOURS                        TEXT   NOT NULL);''')
+        table.commit()
+        
+        cursor.execute('''CREATE TABLE IF NOT EXISTS TREATMENT (
+                            TREATMENT_ID                 KEY  NOT NULL,
+                            DESCRIPTION                 TEXT  NOT NULL,
+                            PATIENT_ID                  INT   NOT NULL,
+                            DOCTOR                      TEXT  NOT NULL,
+                            START_DATE                  TEXT  NOT NULL,
+                            FREQUENCY                   TEXT  NOT NULL,
+                            HOSPITAL                    TEXT  NOT NULL);''')
         table.commit()
         
         table.close()
@@ -116,15 +126,15 @@ class database:
     def general_search_query(self, db_name, record):
         table = sql.connect(db_name)
         curser = table.cursor()
-        condition = '''SELECT * 
-                        FROM  PATIENT 
-                        WHERE ID LIKE '%%s%'
-                            OR NAME LIKE '%%s%'
-                            OR LASTNAME LIKE '%%s%'
-                            OR MINITIAL LIKE '%%s%'
-                            OR AGE LIKE '%%s%'
-                            OR NEXTOFKIN '%%s%'
-                            OR CONTACTINFO '%%s%' ''' %record
+        condition = "SELECT * \
+                        FROM  PATIENT \
+                        WHERE ID LIKE '%" + record  + "%'" +  \
+                           "OR NAME LIKE ''%" + record  + "%'" +  \
+                           "OR LASTNAME LIKE %" + record  + "%'"  + \
+                           "OR MINITIAL LIKE %" + record  + "%'"  + \
+                           "OR AGE LIKE '%" + record  + "%'"  + \
+                           "OR NEXTOFKIN %" + record  + "%'"  + \
+                           "OR CONTACTINFO '%" + record  + "%'"
                             
             
     def insert_record_patient_data(self, db_name, record):
@@ -334,7 +344,7 @@ class database:
         cursor = table.cursor()
         # Prepare SQL query to INSERT a record into the database.
         condition = "SELECT * FROM PATIENT \
-               WHERE " + column + "='%s'" %(key)
+               WHERE " + column + " LIKE '%" + (key) + "%'"
 
         # Creates a list to store output values
         data = [] 
@@ -374,30 +384,23 @@ class database:
         # Creates a list to store output values
         data = []
         list_ = []
-            # Execute the SQL command
-        cursor.execute(condition)
-        # Fetch all the rows in a list of lists.
-        results = cursor.fetchall()
-        for row in results:
-            if len(row) == 7:
-                id_ = row[0]
-                gender_ = row[1]
-                weight_= row[2]
-                diagnosis_ = row[3]
-                date_ = row[4]
-                ethnicity_ = row[5]
-                alergies_ = row[6]
-                value = ( id_, gender_, weight_, diagnosis_, date_, ethnicity_, alergies_)
-                data.append(value)
-            else:
-                for n in range (0,len(row)):
-                    list_.insert(n,row[n])
-            # tuple(list_) turns list_ into a touple
+        
+        try:
+            cursor.execute(condition)        # Execute the SQL command
             
-            data.append(tuple(list_))
-            #clears the list_
-            for n in range (0, len(list_)):
-                list_.pop()
+            # Fetch all the rows in a list of lists.
+            results = cursor.fetchall()
+            
+            for row in results:
+                for n in range (0,len(row)):
+                    list_.insert(n,row[n])  # the list is then converted into a tuple
+                
+                data.append(tuple(list_))
+                #clears the list_
+                for n in range (0, len(list_)):
+                    list_.pop()
+        except:
+            ers.errors().error_messages(5)   
                 
         # disconnect from server
         table.close()
