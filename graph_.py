@@ -3,11 +3,7 @@ Created on Jul 23, 2017
 
 @author: gmaturan
 '''
-'''
-Created on Jun 25, 2016
 
-@author: gmaturan
-'''
 
 
 import Tkinter as tr

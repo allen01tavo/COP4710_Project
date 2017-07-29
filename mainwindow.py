@@ -1,5 +1,5 @@
 '''
-Created on Jun 22, 2016
+Created on Jun 22, 2017
 
 @author: gmaturan
 '''
@@ -11,7 +11,7 @@ def main():
     
     #introduction only last 10 seconds
     #intro.intro().flash_screen()
-    cal.calculator('PATIENT DATABASE') 
+    cal.calculator('HEALTHQue') 
     
 #call main function
 main()

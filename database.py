@@ -1,5 +1,5 @@
 '''
-Created on Jun 23, 2016
+Created on Jun 23, 2017
 filename: database_.py
 
 @author: gmaturan
@@ -82,6 +82,24 @@ class database:
         table = sql.connect(db_name)
         table.execute('INSERT INTO PATIENT VALUES (?,?,?,?,?,?,?)', record)
         table.commit()
+        
+    def insert_record_patient_history(self, db_name, record):
+        #insert items into PATIENT_HIST table
+        table = sql.connect(db_name)
+        table.execute('INSERT INTO PATIENT_HIST VALUES (?,?,?,?,?,?,?)', record)
+        table.commit()
+        
+    def inssert_record_treatment(self, db_name, record):
+        #insert items into TREATMENT table
+        table = sql.connect(db_name)
+        table.execute('INSERT INTO TREATMENT VALUES (?,?,?,?,?,?,?)', record)
+        table.commit()
+    
+    def inssert_record_patient_data(self, db_name, record):
+        #insert items into PATIENT_DATA table
+        table = sql.connect(db_name)
+        table.execute('INSERT INTO PATIENT_DATA VALUES (?,?,?,?,?,?,?)', record)
+        table.commit()
     
     def insert_comments(self, db_name, record):
         #insert items into COMMENTS table
@@ -115,14 +133,7 @@ class database:
                                      COMMENTS_ = %s, ''' %record
         table.execute(statement)
         table.commit()
-        
-    def insert_record_patient_history(self, db_name, record):
-        #insert items into BLSUGGAR table
-        table = sql.connect(db_name)
-        table.execute('INSERT INTO PATIENT_HIST VALUES (?,?,?,?,?,?,?)', record)
-        table.commit()
-        print('value has been saved')
-    
+            
     def general_search_query(self, db_name, record):
         table = sql.connect(db_name)
         curser = table.cursor()
@@ -150,13 +161,10 @@ class database:
         # Deletes item from Database
         table = sql.connect(db_name)
         query = 'DELETE FROM ' + tbl.upper() + ' WHERE NAME=' + record
-        try:
-            table.execute(query)
-            #table.execute('DELETE FROM PATIENT WHERE NAME=?', (record,))
-            table.commit()
-        
-        except:
-            ers.errors().error_messages(5)
+
+        #table.execute(query)
+        table.execute('DELETE FROM PATIENT WHERE NAME=?', (record,))
+        table.commit()
             
         table.close()
         

@@ -1,5 +1,5 @@
 ''' written by: Gustavo A. Maturana
-    written on: May 14, 2016
+    written on: May 14, 2017
     filename: calculator1.py
 '''
 
@@ -72,7 +72,7 @@ class calculator:
                 
         self.search_lbl = Tr.LabelFrame(self.search_frame, text = 'Search By: ')
         choices = ('Select','Patient Number', 'Patient Name','Patient Last Name','Middle Initial','Age', 'Next of Kin', 'Contact Info',\
-                   'Diagnosis','Allergies','General Search', 'Advance Search')
+                   'Diagnosis','Allergies','Treatment','General Search', 'Advance Search')
         self.selection_box = ttk.Combobox(self.search_lbl, values = choices, state = 'readonly')
         self.selection_box.current(0)
         self.selection_box.grid(column = 0, row = 0)
@@ -405,7 +405,7 @@ class calculator:
         result = ers.errors().delete_confirmation(st)
         
         if result == True:
-            db.database().remove_record('patient1.db', 'patient', name_)
+            db.database().remove_record('patient1.db', 'PATIENT', name_)
             
             ers.errors().delete_message(st)
             self.edit_patient_window.destroy()      # Destroys the window
@@ -510,7 +510,7 @@ class calculator:
             if self.selection_box.get() == 'Allergies':
                 self.specific_search(self.general_query_allergies(self.search_entry.get()))
             if self.selection_box.get() == 'General Search':
-                self.general_search_items(self.search_entry.get())
+                self.specific_search(self.general_query_statement_a())
             if self.selection_box.get() == 'Advance Search':
                 self.specific_search(self.general_query_patient(self.search_entry.get()))
     
@@ -678,11 +678,11 @@ class calculator:
         self.records_lable.config(text = "TOTAL RECORDS: " + str(len(self.recordListColumn.get_children())))
         
     def general_query_statement(self):   
-        condition =  "SELECT DISTINCT PATIENT.NAME, PATIENT.LASTNAME, PATIENT.AGE, \
+        condition =  "SELECT PATIENT.NAME, PATIENT.LASTNAME, PATIENT.AGE, \
                         PATIENT_HIST.GENDER, PATIENT_HIST.WEIGHT, PATIENT_HIST.ALERGIES, PATIENT_HIST.ETHNICITY \
                         FROM  PATIENT, PATIENT_HIST \
                         WHERE PATIENT.ID = PATIENT_HIST.PATIENT_ID \
-                        ORDER BY PATIENT.AGE"
+                        ORDER BY PATIENT.AGE DESC"
         return condition
                            
     def general_query_statement_a(self):   
@@ -707,10 +707,20 @@ class calculator:
                         PATIENT_HIST.ALERGIES\
                         FROM  PATIENT JOIN PATIENT_HIST \
                         ON PATIENT.ID = PATIENT_HIST.PATIENT_ID \
-                        WHERE UPPER(PATIENT_HIST.ALERGIES) = '%s' " %((key_).upper())
+                        WHERE UPPER(PATIENT_HIST.ALERGIES) LIKE '%" + (key_).upper() + "%'"
                         
         return condition
     
+    def general_query_treatment(self, key_):
+        condition = "SELECT PATIENT.LASTNAME, TREATMENT.DOCTOR, PATIENT_HIST.DIAGNOSIS, TREATMENT.TREATMENT_ID,\
+                            TREATMENT.DESCRIPTION, TREATMENT.START_DATE, TREATMENT.FREQUENCY \
+                            FROM PATIENT \
+                            JOIN PATIENT_HIST ON PATIENT_HIST.PATIENT_ID = TREATMENT.PATIENT_ID \
+                            JOIN TREATMENT ON TREATMENT.PATIENT_ID = PATIENT.ID \
+                            WHERE UPPER(PATIENT.LASTNAME) LIKE '%" + (key_).upper() + "%'" 
+        
+        return condition
+        
     def general_query_patient(self, key_):
         condition = "SELECT ID, NAME, LASTNAME, MINITIAL, AGE \
                         NEXTOFKIN, CONTACTINFO \

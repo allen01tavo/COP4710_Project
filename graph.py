@@ -1,5 +1,5 @@
 '''
-Created on Jun 25, 2016
+Created on Jun 25, 2017
 
 @author: gmaturan
 '''
@@ -77,7 +77,7 @@ class graph:
         self.print_btn = tr.Button(self.frame_1, \
                                     text = 'Print', command = self.close_window)
         self.export_btn = tr.Button(self.frame_1, \
-                                    text = 'Export', command = self.export_)
+                                    text = 'Treatment', command = self.export_)
         
         # TREEVIEW OF RECORDS
         self.dataCols = ('PATIENT ID', 'GENDER', 'WEIGHT (lbs)', 'DIAGNOSIS', 'DATE', 'ENTHNICITY', 'ALERGIES')

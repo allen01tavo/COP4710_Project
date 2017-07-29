@@ -353,5 +353,5 @@ class graph2:
         self.recordListColumn.tag_configure('oddrow', background = 'lightgrey') 
         
         
-        '''
+   
         
