@@ -330,10 +330,11 @@ class graph:
                                     
     def export_(self):
         
+        self.daily_graph(self.DB_NAME) # DELETE
         self.export_to_excel(self.DB_NAME)
         
         #the following fucntion is just for test
-        self.daily_graph(self.DB_NAME) # DELETE
+        
         
         
     def update_columns(self, cols, db_):

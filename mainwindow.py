@@ -10,7 +10,7 @@ import intro as intro
 def main():
     
     #introduction only last 10 seconds
-    #intro.intro().flash_screen()
+    intro.intro().flash_screen()
     cal.calculator('HEALTHQue') 
     
 #call main function

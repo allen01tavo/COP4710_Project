@@ -484,7 +484,7 @@ class calculator:
                 #To check that patient number is integer
                 if self.IsAnInt(self.search_entry.get()) == True:
                     id_ = 'ID'
-                    self.search_items(id_, int(self.search_entry.get()))
+                    self.search_items(id_, self.search_entry.get())
                 else:
                     ers.errors().integer_error(self.search_entry.get())
             if self.selection_box.get() == 'Patient Name':
@@ -733,6 +733,13 @@ class calculator:
                            "OR UPPER(NEXTOFKIN) LIKE '%" + (key_).upper()  + "%'"  + \
                            "OR UPPER(CONTACTINFO) LIKE '%" + (key_).upper()  + "%'"
                 
+        return condition
+    
+    def general_query_phistory(self, key_):
+        condition = "SELECT * \
+                        FROM PATIENT_HIST \
+                        WHERE UPPER(PATIENT_ID) = " + (key_).upper()
+
         return condition
         
     # col_headers gets the column headers from the statement

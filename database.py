@@ -280,8 +280,6 @@ class database:
         table.close()
         return data
     
-
-    
     # Navigation to the database possible   
     # Implementation needed
     def db_navagation(self):
@@ -311,7 +309,7 @@ class database:
         return name_[1]
     
     def get_record_bool(self, db_name, key):
-        
+        # This function does not work properly
         table = sql.connect(db_name)
         cursor = table.cursor()
         
@@ -355,30 +353,25 @@ class database:
                WHERE " + column + " LIKE '%" + (key) + "%'"
 
         # Creates a list to store output values
-        data = [] 
+        data = []
+        list_ = []
         
         try:
-            # Execute the SQL command
-            cursor.execute(condition)
+            cursor.execute(condition)        # Execute the SQL command   
             # Fetch all the rows in a list of lists.
             results = cursor.fetchall()
+            
             for row in results:
-                id_ = row[0]
-                name = row[1]
-                lname = row[2]
-                mi = row[3]
-                age = row[4]
-                nok = row[5]
-                cinfo = row[6]
+                for n in range (0,len(row)):
+                    list_.insert(n,row[n])  # the list is then converted into a tuple
                 
-                # Collects information an stores it into array
-                #value = "%d,    %s,    %d,    %s" % (id_, name, age, birthday)
-                value = ( id_, lname, name, mi, age, nok, cinfo)
-                data.append(value)
-                
+                data.append(tuple(list_))
+                #clears the list_
+                for n in range (0, len(list_)):
+                    list_.pop()
         except:
-            ers.errors().error_messages(5)
-        
+            ers.errors().error_messages(5)   
+                
         # disconnect from server
         table.close()
         return data
@@ -394,8 +387,7 @@ class database:
         list_ = []
         
         try:
-            cursor.execute(condition)        # Execute the SQL command
-            
+            cursor.execute(condition)        # Execute the SQL command   
             # Fetch all the rows in a list of lists.
             results = cursor.fetchall()
             
