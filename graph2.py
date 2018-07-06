@@ -4,9 +4,9 @@ Created on Jul 27, 2017
 @author: gmaturan
 '''
 
-import Tkinter as tr
+import tkinter as tr
 import errors as ers
-import ttk
+import tkinter.ttk as ttk
 import csv
 
 

@@ -3,15 +3,16 @@
     filename: calculator1.py
 '''
 
-import Tkinter as Tr
+import tkinter as Tr
 
 #from Tkinter import Tk as ttk
-import ttk
+import tkinter.ttk as ttk
 
 import database as db
 import errors as ers
 import graph as graph
-from Tkconstants import VERTICAL
+from tkinter.constants import VERTICAL
+#from tkconstants import 
 
 
 class calculator:

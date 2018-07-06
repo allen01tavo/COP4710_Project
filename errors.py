@@ -6,7 +6,7 @@ Created on Jun 27, 2016
 
 
 #import Tkinter as tk
-import tkMessageBox as messagebox
+from tkinter import messagebox
 #import Tkinter as tk
 
 

@@ -4,11 +4,11 @@ Created on Jun 29, 2016
 @author: gmaturan
 '''
 
-import Tkinter as Tk
+import tkinter as Tk
 import os
 
 import time as t
-from _curses import flash
+#from _curses import flash
 
 
 

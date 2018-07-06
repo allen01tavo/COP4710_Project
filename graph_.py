@@ -6,9 +6,9 @@ Created on Jul 23, 2017
 
 
 
-import Tkinter as tr
+import tkinter as tr
 import errors as ers
-import ttk
+import tkinter.ttk as ttk
 import csv
 
 

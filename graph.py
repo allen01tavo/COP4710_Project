@@ -5,17 +5,17 @@ Created on Jun 25, 2017
 '''
 
 
-import Tkinter as tr
+import tkinter as tr
 import errors as ers
-import ttk
+import tkinter.ttk as ttk
 import csv
 
 
-import numpy as np
+#import numpy as np
 
 import matplotlib
 matplotlib.use("TkAgg")
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 
 import database as db
 import datetime as dt

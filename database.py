@@ -8,8 +8,8 @@ filename: database_.py
 import sqlite3 as sql
 import errors as ers
 import string
-from numpy import record
-import numpy as np
+#from numpy import record
+#import numpy as np
 
 
 
