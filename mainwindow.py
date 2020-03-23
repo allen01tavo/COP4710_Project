@@ -11,7 +11,9 @@ def main():
     
     #introduction only last 10 seconds
     intro.intro().flash_screen()
-    cal.calculator('HEALTHQue') 
+    cal.calculator('HEALTH-Que')
+    print("System is ready to start")
+    print("Application is ready")
     
 #call main function
 main()

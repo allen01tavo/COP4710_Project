@@ -12,7 +12,6 @@ import string
 #import numpy as np
 
 
-
 class database:
     
     DB_NAME = 'patient1.db'

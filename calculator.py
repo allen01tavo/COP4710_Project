@@ -4,15 +4,11 @@
 '''
 
 import tkinter as Tr
-
-#from Tkinter import Tk as ttk
-import tkinter.ttk as ttk
-
+import tkinter.ttk as ttk #from Tkinter import Tk as ttk
 import database as db
 import errors as ers
 import graph as graph
 from tkinter.constants import VERTICAL
-#from tkconstants import 
 
 
 class calculator:

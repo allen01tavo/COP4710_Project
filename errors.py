@@ -30,6 +30,8 @@ class errors:
             messagebox.showinfo('Error 4:', 'There is not value')
         if choice == 5:
             messagebox.showinfo('UNABLE TO FETCH DATA:', 'Check Query algorithm')
+        if choice == 6:
+            messagebox.showinfo('Implementation needed')
     
     def hints(self, choice):
         

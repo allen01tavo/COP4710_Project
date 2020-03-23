@@ -12,21 +12,15 @@ import tkinter.ttk as ttk
 import csv
 
 
-import numpy as np
-
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
-
 import database as db
 import datetime as dt
-
-
 
 class graph:
 
     DB_NAME = ''
-    
     #This class can be used by itself.
     def __init__(self):
         '''
